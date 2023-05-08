@@ -6,6 +6,8 @@ const router = (app) => {
             message: 'Bienvenido a Node.js Express REST API'
         });
     });
+
+    //Mostrar todos usuarios
     app.get('/users', (request, response) => {
         pool.query('SELECT * FROM users ', (error, result) => {
             if (error) throw error;
@@ -39,6 +41,45 @@ const router = (app) => {
         const id = request.params.id;
 
         pool.query('UPDATE users SET ? WHERE id = ?',(request.body,id),(error,result)=>{
+
+        });
+    });
+
+//----------------------------------------------------------------------------------------------------------
+    //Mostrar todos productos
+    app.get('/products', (request, response) => {
+        pool.query('SELECT * FROM products ', (error, result) => {
+            if (error) throw error;
+            response.send(result);
+        });
+    });
+
+    //Mostrar un solo productos por ID
+    app.get('/products/:id',(request, response) => {
+        const_id = request.params.id;
+
+        pool.query('SELECT * FROM products WHERE id = ?',id, (error, result) => {
+            if (error) throw error;
+
+            response.send(result);
+        });
+    });
+    
+    //Agregar un nuevo productos
+    app.post('/products',(request,response) => {
+        pool.query('INSERT INTO products SET ?', request.body, (error,result) => {
+            if (error) throw error;
+
+            response.status(201).send('User added with ID: ${result.inserted}');
+        });if (error) throw error;
+        response.send('User updated successfully');
+    });
+
+    //Actualizar un producto existente
+    app.put('/products/:id',(request,response)=>{
+        const id = request.params.id;
+
+        pool.query('UPDATE products SET ? WHERE id = ?',(request.body,id),(error,result)=>{
 
         });
     });
